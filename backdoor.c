@@ -217,4 +217,5 @@ module_exit(backdoor_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Michel Hecker Faria");
+MODULE_VERSION(1.0);
 MODULE_DESCRIPTION("A simple backdoor with keylogger to debugfs");
