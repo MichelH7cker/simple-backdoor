@@ -1,6 +1,5 @@
 import socket
 import time
-from datetime import datetime
 
 def send_file(filename, destination_address, destination_port):
     # CREATE SOCKET
@@ -9,6 +8,18 @@ def send_file(filename, destination_address, destination_port):
     try:
         # CONNECT TO SERVER
         sock.connect((destination_address, destination_port))
+
+        # OPEN FILE TO READ
+        with open(filename, 'rb') as file:
+            while True:
+                # READ FILE
+                data = file.read()
+
+                # SEND FILE TO SERVER
+                sock.sendall(data)
+
+                # WAIT 5 SECONDS TO SEND THE FILE AGAIN
+                time.sleep(5)
 
     finally:
         # CLOSES SOCKET
