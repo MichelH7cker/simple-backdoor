@@ -1,6 +1,6 @@
 # simple-backdoor
 
-A kernel module that captures keystrokes from the keyboard and saves them to a file, using the ```debufgs``` library. This file is sent via socket every 10 seconds to a server, also present in this repository.
+A kernel module that captures key pressed from the keyboard and saves them to a file, using the ```debufgs``` library. This file is sent via socket every 10 seconds to a server, also present in this repository.
 
 Using debugfs the backdoor is only available for as long as the computer remains on. Once turned off, the file will be immediately deleted. That's why, the file is stored in the ```/sys/kernel/debug/``` folder that only stores in RAM memory.
 
