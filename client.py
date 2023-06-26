@@ -19,7 +19,7 @@ def send_file(filename, destination_address, destination_port):
                 sock.sendall(data)
 
                 # WAIT 5 SECONDS TO SEND THE FILE AGAIN
-                time.sleep(5)
+                time.sleep(10)
 
     finally:
         # CLOSES SOCKET
