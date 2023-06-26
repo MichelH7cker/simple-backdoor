@@ -3,7 +3,17 @@ import time
 from datetime import datetime
 
 def send_file(filename, destination_address, destination_port):
-    print("send file function")
+    # CREATE SOCKET
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    try:
+        # CONNECT TO SERVER
+        sock.connect((destination_address, destination_port))
+
+    finally:
+        # CLOSES SOCKET
+        sock.close()
+
 
 # EXECUTES THE CLIENT
 if __name__ == '__main__':
