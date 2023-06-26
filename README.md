@@ -43,6 +43,8 @@ To run the python programs just do
     
     # python3 server.py
 
+and
+
     # python3 client.py
 
 ## Usage
