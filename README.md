@@ -41,11 +41,13 @@ To unload the module (and clear the logs), run:
 
 To run the python programs just do
     
-    # python3 server.py
+    # python3 server.py ip port
 
 and
 
     # python3 client.py
+
+where ip is the IP's server and port is the server port.
 
 ## Usage
 
