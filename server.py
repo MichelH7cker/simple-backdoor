@@ -18,6 +18,7 @@ def receive_prt_sc(client, n):
 
 
 def handle_print_screen(client):
+    print("[+] 'PRINT' to take a target's screenshot\n")
     n = 0
     while True:
         while True:
