@@ -1,5 +1,8 @@
 # Generated file of program
 *.txt
+*.jpg
+*.png
+*.jpeg
 
 # Prerequisites
 *.d

