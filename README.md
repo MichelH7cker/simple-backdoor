@@ -87,4 +87,4 @@ vermagic:       5.17.5-76051705-generic SMP preempt mod_unload modversions
 <a href="https://github.com/jarun/googler/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-yellow.svg?maxAge=2592000" alt="License" /></a>
 
 ## Developer
-Copyright © 2023 [Michel Hecker Faria](mailto:michel.hecker@usp.br) [Vitor Nishimura Vian](mailto:vitor.vian@usp.br)
+Copyright © 2023 [Michel Hecker Faria](mailto:michel.hecker@usp.br) & [Vitor Nishimura Vian](mailto:vitor.vian@usp.br)
