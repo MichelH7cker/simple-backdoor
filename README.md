@@ -130,4 +130,4 @@ The function related to receiving the data sent by the client executing the keyl
 <a href="https://github.com/jarun/googler/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-GPLv2-yellow.svg?maxAge=2592000" alt="License" /></a>
 
 ## Developer
-Copyright © 2023 [Michel Hecker Faria - 12609690](mailto:michel.hecker@usp.br) & [Vitor Nishimura Vian - 5255289](mailto:vitor.vian@usp.br) & [Guilherme Augusto Moreira - 12547281](mailto:guilherme_augusto@usp.br)
+Copyright © 2023 [Michel Hecker Faria - 12609690](mailto:michel.hecker@usp.br)
